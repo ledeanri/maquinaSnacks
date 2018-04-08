@@ -1,0 +1,27 @@
+{
+  "name": "maquina_snacks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ledeanri/maquinaSnacks.git"
+  },
+  "author": "leandro.ribeiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ledeanri/maquinaSnacks/issues"
+  },
+  "homepage": "https://github.com/ledeanri/maquinaSnacks#readme"
+}
