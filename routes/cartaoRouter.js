@@ -7,6 +7,14 @@ var moment = require('moment');
 
 var usuarioController = require('../controller/usuarioController');
 
+function recarrega_cartao(id){
+	cartaoController.carga_automatica(id, function(resp, callback){
+		if (!resp){
+			callback('ocorreu um erro');
+		}
+	});
+}
+
 function getToken(req, res, next){
   var header = req.headers['authorization'];
 
@@ -36,9 +44,20 @@ router.post('/cadastrar', getToken, function(req, res){
 
 router.get('/mostrar_saldo/:id', function(req, res){
 	var id = req.params.id;
+	recarrega_cartao(id);
 	cartaoController.mostrar_saldo(id, function(resp){
     res.json(resp);
   });
+});
+
+router.post('/comprar', function(req, res){
+	var id = req.body.id;
+	var id_produto = req.body.id_produto;
+	recarrega_cartao(id);
+
+	cartaoController.comprar(id, id_produto, function(resp){
+	  res.json(resp);
+	});
 });
 
 module.exports = router;
