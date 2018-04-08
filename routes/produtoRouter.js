@@ -37,10 +37,10 @@ router.post('/cadastrar', getToken, function(req, res){
   usuarioController.authorize(token, function(resp){
     if (resp === true){
       var nome = req.body.nome;
-      var descricao = req.body.descricao;
-      var valor = req.body.valor;
+      var quantidade = parseInt(req.body.quantidade);
+      var valor = parseFloat(req.body.valor.replace(',', '.'));
 
-      produtoController.save(nome, descricao, valor, function(resp){
+      produtoController.save(nome, quantidade, valor, function(resp){
         res.json(resp);
       });
     } else {

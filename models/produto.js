@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 var ProdutoSchema = new Schema({
   nome:String,
-  descricao:String,
-  valor:String
+  quantidade:Number,
+  valor:Number
 });
 
 module.exports = mongoose.model('Produto', ProdutoSchema);

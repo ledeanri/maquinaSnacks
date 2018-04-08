@@ -1,9 +1,9 @@
 var Produto = require('../models/produto');
 
-exports.save = function(nome, descricao, valor, callback){
+exports.save = function(nome, quantidade, valor, callback){
   new Produto({
     'nome': nome,
-    'descricao': descricao,
+    'quantidade': quantidade,
     'valor': valor
   }).save(function(error,produto){
     if(error){
