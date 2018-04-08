@@ -11,7 +11,7 @@ exports.save = function(nome, descricao, valor, callback){
     } else {
       callback(produto);
     }
-  })
+  });
 }
 
 exports.list = function(callback){
