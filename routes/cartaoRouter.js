@@ -1,11 +1,13 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
+const Joi = require('joi');
+const express = require('express');
+const router = express.Router();
 
-var cartaoController = require('../controller/cartaoController');
+const cartaoController = require('../controller/cartaoController');
 
-var moment = require('moment');
+const moment = require('moment');
 
-var usuarioController = require('../controller/usuarioController');
+const usuarioController = require('../controller/usuarioController');
 
 function recarrega_cartao(id){
 	cartaoController.carga_automatica(id, function(resp, callback){
@@ -16,7 +18,7 @@ function recarrega_cartao(id){
 }
 
 function getToken(req, res, next){
-  var header = req.headers['authorization'];
+  let header = req.headers['authorization'];
 
   if (typeof header != 'undefined'){
     req.token = header;
@@ -27,10 +29,16 @@ function getToken(req, res, next){
 }
 
 router.post('/cadastrar', getToken, function(req, res){
-  var token = req.token;
+  let token = req.token;
 
   usuarioController.authorize(token, function(resp){
     if (resp === true){
+			const schema = { nome: Joi.string().min(3).required() };
+			const result = Joi.validate(req.body, schema);
+			if(result.error){
+				res.status(400).send(result.error.details[0].message);
+				return;
+			}
       var nome = req.body.nome;
 
       cartaoController.save(nome, function(resp){
@@ -43,7 +51,13 @@ router.post('/cadastrar', getToken, function(req, res){
 });
 
 router.get('/mostrar_saldo/:id', function(req, res){
-	var id = req.params.id;
+	const schema = { id: Joi.string().alphanum().min(3).max(30).required() };
+	const result = Joi.validate(req.params, schema);
+	if(result.error){
+		res.status(400).send(result.error.details[0].message);
+		return;
+	}
+	let id = req.params.id;
 	recarrega_cartao(id);
 	cartaoController.mostrar_saldo(id, function(resp){
     res.json(resp);
@@ -51,8 +65,17 @@ router.get('/mostrar_saldo/:id', function(req, res){
 });
 
 router.post('/comprar', function(req, res){
-	var id = req.body.id;
-	var id_produto = req.body.id_produto;
+	const schema = {
+		id: Joi.string().alphanum().min(3).max(30).required(),
+		id_arquivo: Joi.string().alphanum().min(3).max(30).required()
+	};
+	const result = Joi.validate(req.body, schema);
+	if(result.error){
+		res.status(400).send(result.error.details[0].message);
+		return;
+	}
+	let id = req.body.id;
+	let id_produto = req.body.id_produto;
 	recarrega_cartao(id);
 
 	cartaoController.comprar(id, id_produto, function(resp){

@@ -1,4 +1,5 @@
-var Produto = require('../models/produto');
+'use strict';
+const Produto = require('../models/produto');
 
 exports.save = function(nome, quantidade, valor, callback){
   new Produto({

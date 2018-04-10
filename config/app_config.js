@@ -1,8 +1,9 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+'use strict';
+const express = require('express');
+const bodyParser = require('body-parser');
 
-var porta = '3000';
-var app = module.exports = express();
+const porta = process.env.PORT || '3000';
+const app = module.exports = express();
 
 app.listen(porta);
 

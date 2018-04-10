@@ -1,10 +1,12 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
+const Joi = require('joi');
+const express = require('express');
+const router = express.Router();
 
-var usuarioController = require('../controller/usuarioController');
+const usuarioController = require('../controller/usuarioController');
 
 function getToken(req, res, next){
-  var header = req.headers['authorization'];
+  let header = req.headers['authorization'];
 
   if (typeof header != 'undefined'){
     req.token = header;
@@ -15,8 +17,17 @@ function getToken(req, res, next){
 }
 
 router.post('/cadastrar', function(req, res){
-  var nome = req.body.nome;
-  var senha = req.body.senha;
+  const schema = {
+    nome: Joi.string().min(3).required(),
+    senha: Joi.string().min(3).required(),
+  };
+  const result = Joi.validate(req.body, schema);
+  if(result.error){
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  let nome = req.body.nome;
+  let senha = req.body.senha;
 
   usuarioController.save(nome, senha, function(resp){
     res.json(resp);
@@ -24,8 +35,17 @@ router.post('/cadastrar', function(req, res){
 });
 
 router.post('/login', function(req, res){
-  var nome = req.body.nome;
-  var senha = req.body.senha;
+  const schema = {
+    nome: Joi.string().min(3).required(),
+    senha: Joi.string().min(3).required(),
+  };
+  const result = Joi.validate(req.body, schema);
+  if(result.error){
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  let nome = req.body.nome;
+  let senha = req.body.senha;
 
   usuarioController.login(nome, senha, function(resp){
     res.json(resp);
@@ -33,7 +53,7 @@ router.post('/login', function(req, res){
 });
 
 router.get('/listar', getToken, function(req, res){
-  var token = req.token;
+  let token = req.token;
 
   usuarioController.list(token, function(resp){
     res.json(resp);

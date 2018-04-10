@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt-nodejs');
-var jwt = require('jsonwebtoken');
+'use strict';
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
 
-var UsuarioSchema = new Schema({
+const UsuarioSchema = new Schema({
   'nome':String,
   'senha':String,
   'token':String

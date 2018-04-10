@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+'use strict';
+const mongoose = require('mongoose');
 
-var urlString = 'mongodb://localhost/maquinasnacks';
+const urlString = 'mongodb://localhost/maquinasnacks';
 
 mongoose.connect(urlString, function(err, res){
   if (err){

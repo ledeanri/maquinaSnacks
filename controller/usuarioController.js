@@ -1,4 +1,5 @@
-var Usuario = require('../models/usuario');
+'use strict';
+const Usuario = require('../models/usuario');
 
 exports.save =  function(nome, senha, callback){
   Usuario.findOne({'nome':nome}, function(erro, usuario){
@@ -7,7 +8,7 @@ exports.save =  function(nome, senha, callback){
     } else if(usuario) {
       callback('Usuário já existe');
     } else {
-      var novoUsuario = new Usuario();
+      let novoUsuario = new Usuario();
       novoUsuario.nome = nome;
       novoUsuario.senha = novoUsuario.gerarSenha(senha);
       novoUsuario.token = novoUsuario.gerarToken(nome, senha);
