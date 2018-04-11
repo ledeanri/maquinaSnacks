@@ -50,37 +50,53 @@ router.post('/cadastrar', getToken, function(req, res){
   });
 });
 
-router.get('/mostrar_saldo/:id', function(req, res){
-	const schema = { id: Joi.string().alphanum().min(3).max(30).required() };
-	const result = Joi.validate(req.params, schema);
-	if(result.error){
-		res.status(400).send(result.error.details[0].message);
-		return;
-	}
-	let id = req.params.id;
-	recarrega_cartao(id);
-	cartaoController.mostrar_saldo(id, function(resp){
-    res.json(resp);
+router.get('/mostrar_saldo/:id', getToken, function(req, res){
+	let token = req.token;
+
+	usuarioController.authorize(token, function(resp){
+    if (resp === true){
+			const schema = { id: Joi.string().alphanum().min(3).max(30).required() };
+			const result = Joi.validate(req.params, schema);
+			if(result.error){
+				res.status(400).send(result.error.details[0].message);
+				return;
+			}
+			let id = req.params.id;
+			recarrega_cartao(id);
+			cartaoController.mostrar_saldo(id, function(resp){
+		    res.json(resp);
+		  });
+    } else {
+      res.sendStatus(403);
+    }
   });
 });
 
-router.post('/comprar', function(req, res){
-	const schema = {
-		id: Joi.string().alphanum().min(3).max(30).required(),
-		id_arquivo: Joi.string().alphanum().min(3).max(30).required()
-	};
-	const result = Joi.validate(req.body, schema);
-	if(result.error){
-		res.status(400).send(result.error.details[0].message);
-		return;
-	}
-	let id = req.body.id;
-	let id_produto = req.body.id_produto;
-	recarrega_cartao(id);
+router.post('/comprar', getToken, function(req, res){
+	let token = req.token;
 
-	cartaoController.comprar(id, id_produto, function(resp){
-	  res.json(resp);
-	});
+	usuarioController.authorize(token, function(resp){
+    if (resp === true){
+			const schema = {
+				id: Joi.string().alphanum().min(3).max(30).required(),
+				id_produto: Joi.string().alphanum().min(3).max(30).required()
+			};
+			const result = Joi.validate(req.body, schema);
+			if(result.error){
+				res.status(400).send(result.error.details[0].message);
+				return;
+			}
+			let id = req.body.id;
+			let id_produto = req.body.id_produto;
+			recarrega_cartao(id);
+
+			cartaoController.comprar(id, id_produto, function(resp){
+			  res.json(resp);
+			});
+    } else {
+      res.sendStatus(403);
+    }
+  });
 });
 
 module.exports = router;

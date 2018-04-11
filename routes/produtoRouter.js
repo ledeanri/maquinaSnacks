@@ -35,8 +35,8 @@ router.get('/', getToken, function(req, res){
 router.post('/cadastrar', getToken, function(req, res){
   const schema = {
     nome: Joi.string().alphanum().min(3).max(30).required(),
-    quantidade: Joi.string().alphanum().min(3).max(30).required(),
-    valor: Joi.string().alphanum().min(3).max(30).required()
+    quantidade: Joi.string().required(),
+    valor: Joi.string().required()
   };
 	const result = Joi.validate(req.body, schema);
 	if(result.error){
@@ -61,7 +61,7 @@ router.post('/cadastrar', getToken, function(req, res){
 });
 
 router.delete('/deletar/:id', getToken, function(req, res){
-  const schema = { nome: Joi.string().min(3).required() };
+  const schema = { id: Joi.string().min(3).required() };
   const result = Joi.validate(req.params, schema);
   if(result.error){
     res.status(400).send(result.error.details[0].message);
